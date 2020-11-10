@@ -31,5 +31,5 @@ new_im = cat(3, out_R,out_G,out_B);
 %subplot(1,2,2);
 %imshow(new_im);
 
-out_im = new_im;
+out_im = im2double(new_im);
 end

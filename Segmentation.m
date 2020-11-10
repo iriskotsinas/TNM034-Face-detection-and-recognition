@@ -13,10 +13,13 @@ cr = a(:,:,3);
 %Allocate memory for the segment mask
 segment = zeros(w,h);
 
+
+% ll= impixel(hue);
+% ll
 %Create the mask by using threshold values from the input image.
 for i=1:w
     for j=1:h            
-        if  0.5<=cr(i,j) && cr(i,j)<=0.6 && 0.4<=cb(i,j) && cb(i,j)<=0.5 && 0<=hue(i,j) && hue(i,j)<=0.075 %|| hue(i,j)>= 0.65    
+        if  (0.48<=cr(i,j) && cr(i,j)<=0.6 && 0.4<=cb(i,j) && cb(i,j)<=0.52 &&  hue(i,j)>=0 && hue(i,j)<=0.12) || hue(i,j)>= 0.8    
             segment(i,j)=1;            
         else       
             segment(i,j)=0;    
@@ -24,12 +27,25 @@ for i=1:w
     end
 end
 
+imshow(segment)
+figure;
+%Open the image
+se = strel('disk',12,4);
+segment = imclose(segment,se);
+segment = imopen(segment,se);
+%Close the image
+
+
 imshow(segment);
+figure;
 %Add the different color channels multiplied by the segment mask.
 im(:,:,1)=I(:,:,1).*segment;   
 im(:,:,2)=I(:,:,2).*segment; 
 im(:,:,3)=I(:,:,3).*segment; 
-figure,imshow((mat2gray(im)));
+
+
+% imshow(im);
+
 %returnimage = Segmentation(im);
 
 
