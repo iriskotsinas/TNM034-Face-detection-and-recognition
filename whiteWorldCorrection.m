@@ -1,6 +1,6 @@
 function out_im = whiteWorldCorrection(im) 
-im = imread("db1_01.jpg");
-im = im2double(im);
+%im = imread("db1_01.jpg");
+%im = im2double(im);
 
 %Split image to each channel
 im_R = im(:,:,1);
