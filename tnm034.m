@@ -5,5 +5,8 @@
 % i.e. ‘1’, ‘2’,...,‘16’ for the persons belonging to ‘db1’ 
 % and ‘0’ for all other faces.
 function id = tnm034(im)
-    "TODO"
+    image = imread(im);
+    
+    % Color correct
+    output = colorCorrectionGrayWorld(image);
 end
