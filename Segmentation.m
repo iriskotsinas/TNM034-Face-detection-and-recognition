@@ -1,13 +1,18 @@
 
 
-function segmentedimage = placeholder(image)
-%image = im2,double(image);
-[h,~,~]= rgb2hsv(image);
-a = rgb2ycbcr(image);
+function segmentedimage = placeholder(I)
+
+
+a=rgb2ycbcr(I);
+[hue, ~,~] = rgb2hsv(I);
+cb = a(:,:,2);
+cr = a(:,:,3);
+
+[w h]=size(I(:,:,1));
 
 for i=1:w
     for j=1:h            
-        if  140<=cr(i,j) && cr(i,j)<=165 && 140<=cb(i,j) && cb(i,j)<=195 && 0.01<=hue(i,j) && hue(i,j)<=0.1     
+        if  0<=cr(i,j) && cr(i,j)<=1&& 0.02<=cb(i,j) && cb(i,j)<=1 && 0<=hue(i,j) && hue(i,j)<=0.075 %|| hue(i,j)>= 0.65    
             segment(i,j)=1;            
         else       
             segment(i,j)=0;    
@@ -18,6 +23,13 @@ end
 im(:,:,1)=I(:,:,1).*segment;   
 im(:,:,2)=I(:,:,2).*segment; 
 im(:,:,3)=I(:,:,3).*segment; 
-figure,imshow(uint8(im));
+figure,imshow((mat2gray(im)));
+
+
+
+
+
+%returnimage = Segmentation(im);
+
 
 end
