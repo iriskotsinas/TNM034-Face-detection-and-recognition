@@ -1,11 +1,11 @@
-function segmentedimage = placeholder(I)
+function segmentedimage = Segmentation(I)
 
 a=rgb2ycbcr(I);
 [hue, ~,~] = rgb2hsv(I);
 cb = a(:,:,2);
 cr = a(:,:,3);
 
-[w h]=size(I(:,:,1));
+[w, h]=size(I(:,:,1));
 
 for i=1:w
     for j=1:h            
