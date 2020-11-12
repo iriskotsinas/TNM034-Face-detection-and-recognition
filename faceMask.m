@@ -1,4 +1,4 @@
-function im = Segmentation(I)
+function im = faceMask(I)
 %Convert image to YCbCr color space
 a=rgb2ycbcr(I);
 %Make a conversion to HSV color space as well.
@@ -27,17 +27,17 @@ for i=1:w
     end
 end
 
-imshow(segment)
-figure;
+%imshow(segment)
+%figure;
 %Open the image
-se = strel('disk',12,4);
+se = strel('disk',14,4);
 segment = imclose(segment,se);
 segment = imopen(segment,se);
 %Close the image
 
 
-imshow(segment);
-figure;
+%imshow(segment);
+%figure;
 %Add the different color channels multiplied by the segment mask.
 im(:,:,1)=I(:,:,1).*segment;   
 im(:,:,2)=I(:,:,2).*segment; 

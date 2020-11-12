@@ -5,9 +5,10 @@
 % i.e. ‘1’, ‘2’,...,‘16’ for the persons belonging to ‘db1’ 
 % and ‘0’ for all other faces.
 function id = tnm034(im)
-    x = im2double(imread('images/DB1/db1_11.jpg'));
-    y = whiteWorldCorrection(x);
-    y(1,1,1)
-    z = Segmentation(y);
-    %imshow(z)
+    myimg = im2double(imread('images/DB1/db1_11.jpg'));
+    myimg = whiteWorldCorrection(myimg);
+    myimg = faceMask(myimg);
+    
+    figure
+    imshow(myimg)
 end       
