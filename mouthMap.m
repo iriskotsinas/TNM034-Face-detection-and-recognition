@@ -22,7 +22,7 @@ mouthMapImage = mouthMapImage./max(mouthMapImage(:));
 
 r = 20; 
 SE = strel('disk', r);
-mouthMapImage = imdilate(mouthMapImage,SE)
+mouthMapImage = imdilate(mouthMapImage,SE);
 
 output = mouthMapImage;
 end
