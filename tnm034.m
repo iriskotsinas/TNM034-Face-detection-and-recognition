@@ -34,7 +34,7 @@ function id = tnm034(im)
 % end
 
 %%%%READ SINGLE IMAGE FOR TESTING
- myimg = im2double(imread('images/DB1/db1_02.jpg'));
+ myimg = im2double(imread('images/DB1/db1_03.jpg'));
  myimg = whiteWorldCorrection(myimg);
     myimg = faceMask(myimg);
     eye = eyeMap(myimg) > 0.75;
@@ -78,16 +78,20 @@ y(4,1)=statsMouth.Centroid(1,2);
 lka = size(stats.Centroid)
 minimin =min(size(stats.Centroid))
 lka(1)
-%Allocate Triangle memory
-triangles = zeros(23, 10);
+%Allocate Triangle memory, based on how many triangles that will be
+%available with the amount of vertices.
+syms n;
+amtTri = symsum(n-1, n, 1, lka(1))
+amtTri = double(amtTri);
+triangles = zeros(amtTri, 10);
 
 count = 1;
 
 for j=1:1:size(stats.Centroid)-1
-   triangles(count,1)=x(1,1);
-   triangles(count,5)=y(1,1);
-   triangles(count,4)=x(1,1);
-   triangles(count,8)=y(1,1);
+    triangles(count,1)=x(1,1);
+    triangles(count,5)=y(1,1);
+    triangles(count,4)=x(1,1);
+    triangles(count,8)=y(1,1);
    
     y(1,1)=statsMouth.Centroid(1,2);
     
@@ -100,41 +104,40 @@ for j=1:1:size(stats.Centroid)-1
  
     
     for k=j+1:1:lka(1)
-           triangles(count,1)=x(1,1);
-           triangles(count,5)=y(1,1);
-           triangles(count,4)=x(1,1);
-           triangles(count,8)=y(1,1);
-            triangles(count,2)=(x(2,1));
-    triangles(count,6)=(y(2,1));
+        triangles(count,1)=x(1,1);
+        triangles(count,5)=y(1,1);
+        triangles(count,4)=x(1,1);
+        triangles(count,8)=y(1,1);
+        triangles(count,2)=(x(2,1));
+        triangles(count,6)=(y(2,1));
         
         x(3,1)=stats.Centroid(k,1);
         y(3,1)=stats.Centroid(k,2);
         
-        
-          
         triangles(count,3)=(x(3,1));
         triangles(count,7)=(y(3,1));
-    
         
         diff(j) = 0;
         LengthDiffVector(j) = 0;
         %Calculate distance and angle between each point in a created
-        
         for w=1:1:3
             
             a = [x(w) y(w)];
             b = [x(w+1) y(w+1)];
-            
-            ang = (180*acos(dot(a,b)/(norm(a)*norm(b))))/pi;
-            diff(j) = diff(j) + abs(ang-60);
-            
-            
-            
+            %Calculate the angle between the two points.
             if(w==1)
                LengthDiffVector(j,1) = norm(a-b);
+               ang = (180*acos(dot(a,b)/(norm(a)*norm(b))))/pi;
+               %The optimal angle between a face and eyes seem to be around 60
+               %degrees.
+               diff(j) = diff(j) + abs(ang-60);
             end
             
             if(w==3)
+                ang = (180*acos(dot(a,b)/(norm(a)*norm(b))))/pi;
+                %The optimal angle between a face and eyes seem to be around 60
+                %degrees.
+                diff(j) = diff(j) + abs(ang-60);
                LengthDiffVector(j,2) = norm(a-b);
             end
         end
@@ -172,17 +175,102 @@ for j=1:1:size(stats.Centroid)-1
    
 
 end
-
-count
+%All possible triangles are now saved. We will now compare them to find the
+%optimal triangle for both angle and length.
 
 hold on;
-sizeTri = size(triangles)
-for j=1:1:sizeTri(1)
+sizeTri = size(triangles);
+
+    
+    %Add the starting triangle as out 'best resulting triangle' for now
+    optimalAngle = triangles(1, 9);
+    optimalLength = triangles(1, 10);
+
+    anglevalues = triangles(:,9)
+    lengthvalues = triangles(:,10);
+    [MinAng, AngIndex] = sort(anglevalues(:));
+    [MinLen, LenIndex] = sort(lengthvalues(:));
+    
+    MinLen
+    MinAng
+%     plot(triangles(LenIndex(1), (1:4)), triangles(LenIndex(1), (5:8)));
+    %+5 and +30 is random numbers taken for the average. It is not how this should be implemented
+    resultingTriangle = triangles(1, :);
     
     
-   
-   plot(triangles(j,(1:4)),triangles(j,(5:8)), 'r');
-end
+    maxvalLen = max(MinLen)
+    minvalLen = min(MinLen)
+    maxvalAng = max(MinAng)
+    minvalAng = min(MinAng)
+    
+    resLen = abs(((maxvalLen-minvalLen)/100)*(triangles(:,10)-minvalLen))
+    resAng = ((maxvalAng-minvalAng)/100)*(triangles(:,9)-minvalAng)
+    
+    resTot = resAng;
+    
+    
+    [a,b] = min(resTot)
+    
+    resultingTriangle = triangles(b,:);
+    
+%     
+%     optimalLength = mean(resLen);
+%     optimalAngle = mean(resAng);
+% for j=1:1:sizeTri(1)
+%     
+%     resLen = abs(((maxvalLen-minvalLen)/100)*(MinLen(j)-minvalLen));
+%     resAng = ((maxvalAng-minvalAng)/100)*(MinAng(j)-minvalAng);
+%     
+%     
+%     if(resAng<optimalAngle)
+%         
+%         if(resLen < optimalLength)
+%             optimalAngle=MinAng(j);
+%             optimalLength = MinLen(j);
+%             resultingTriangle = triangles(AngIndex(j), :);
+%          
+%         end
+% 
+%     elseif(MinLen(j)< optimalLength)
+%             if(MinLen(j) < optimalLength+20)
+%                 optimalAngle=MinAng(j);
+%                 optimalLength = MinLen(j);
+%                 resultingTriangle = triangles(LenIndex(j), :);
+%             end
+%     elseif(resultingTriangle(1,1)==0)
+%         resultingTriangle = triangles(j);
+%     end
+%     
+% end
+    
+    
+%     diff(j) = 0;
+%     LengthDiffVector(j) = 0;
+    
+    
+%     for w=1:1:3
+%         %Instatiate a temporary triangle
+%         temptri = triangle(j);
+%         %these are two temporary points in.
+%         x1temp = [temptri(w) temptri(w+3)];
+%         x2temp = [temptri(w+1) temptri(w+4)];
+% 
+%         ang = (180*acos(dot(x1temp,x2temp)/(norm(x1temp)*norm(x2temp))))/pi;
+%         
+%         diff(j) = diff(j) + abs(ang-60);
+%         %Store the distance between the points in a length vector to
+%         %further down calculate the minimal distance.
+%         if(w==1)
+%            LengthDiffVector(j,1) = norm(x1temp-x2temp);
+%         end
+% 
+%         if(w==3)
+%            LengthDiffVector(j,2) = norm(x1temp-x2temp);
+%         end
+%     end
+
+hold on;
+plot(resultingTriangle((1:4)),resultingTriangle((5:8)));
 
 
 
