@@ -46,14 +46,12 @@
     
     figure
     imshow(origimg)
-    
-    %We can click on the eyes if we want
-    %[x, y] = ginput(2)
-    %lefteye = [x(1), y(1)];
-    %righteye = [x(2), y(2)];
+    [x, y] = ginput(2)
+    lefteye = [x(1), y(1)];
+    righteye = [x(2), y(2)];
     
     %Align image
-    [rotImg, xmin, ymin, width, height] = faceAlignment(origimg, lefteye , righteye);
+    [rotImg, xmin, ymin, width, height] = faceAlignment(origimg, eye, mouth, lefteye , righteye);
     
     
     %Crop image

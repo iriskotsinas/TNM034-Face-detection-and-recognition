@@ -1,16 +1,11 @@
-function [image, xmin, ymin, width, height ] = faceAlignment(origimg, eye, mouth)
+function [image, xmin, ymin, width, height] = faceAlignment(origimg, lefteye, righteye)
     
     %Get eye position
-    x = regionprops(eye, 'centroid');
-    c = cat(1, x.Centroid);
+    c = [lefteye; righteye]
     
     % Get distance between eyes
     xlength = abs(c(1,1) - c(2,1));
     ylength = abs(c(1,2) - c(2,2));
-    
-    %Get mouth position
-    x = regionprops(mouth, 'centroid');
-    m = cat(1, x.Centroid);
     
     %Rotate image
     hypo = sqrt(xlength^2 + ylength^2);
@@ -24,16 +19,12 @@ function [image, xmin, ymin, width, height ] = faceAlignment(origimg, eye, mouth
         angle = acosd(xlength / hypo);
     end
     
-    image = imrotate(origimg, -angle); % <--- RETURN VALUE
-    figure
-    imshow(image)
-    title('Rotated Image')
+    rotImage = imrotate(origimg, -angle); % <--- RETURN VALUE
     
     %Get new position of eye
     
     leftEyeP = c(1,:)';    % coordinates of left eye point
     rightEyeP = c(2,:)';   % coordinates of right eye point
-    mouthP = m'; % coordinates of mouth point
     
     alpha = angle;   % angle for rotation ---- VARFÖR FUNKAR DETTA?? DET SKA VÄL VA -angle??
     RotatedIm = imrotate(origimg,alpha);   % rotation of the main image (im)
@@ -43,38 +34,29 @@ function [image, xmin, ymin, width, height ] = faceAlignment(origimg, eye, mouth
     
     rotateLeftEye = RotMatrix*(leftEyeP-ImCenterA)+ImCenterB;
     rotateRightEye = RotMatrix*(rightEyeP-ImCenterA)+ImCenterB;
-    rotateMouth = RotMatrix*(mouthP-ImCenterA)+ImCenterB;
     
     %Transpose
     rotateLeftEye = rotateLeftEye';
     rotateRightEye = rotateRightEye';
-    rotateMouth = rotateMouth';
+
     
-    %Plot x and y position of rotated eye and mouth
-    hold on;
-    plot(rotateLeftEye(1,1), rotateLeftEye(1,2), 'Oy'); 
-   	hold on;
-    plot(rotateRightEye(1,1), rotateRightEye(1,2) , 'Oy');
-    hold on;
-    plot(rotateMouth(1,1), rotateMouth(1,2), '*y');
-    hold off
+    %Return length between eyes
+    length_x = abs(rotateRightEye(1,1) - rotateLeftEye(1,1));
+   
     
-    %Plot initial image
-    figure
-    imshow(origimg)
-    title('Initial Image')
-    hold on
-    plot(c(1,1),c(1,2), 'Og');
-    plot(c(2,1),c(2,2), 'Og');
+    %Scale image
+    image = imresize(rotImage, 111/length_x, 'bilinear'); %<---- RETURN VALUE
+
     
-    hold on;
-    plot(m(1,1), m(1,2), '*g');
-    hold off;
+    %Scale coordinates
+    rotateLeftEye = rotateLeftEye.*(111/length_x); 
+    rotateRightEye = rotateRightEye.*(111/length_x);
+        
     
     %Return variables used for cropping
-    xmin = rotateLeftEye(1,1) - 90;
-    ymin = rotateLeftEye(1,2) - 200;
-    width = rotateRightEye(1,1) + 90 - xmin;
-    height = rotateMouth(1,2) + 90 - ymin;
+    xmin = floor(rotateLeftEye(1,1) - 90)
+    ymin = floor(rotateLeftEye(1,2) - 200)
+    width = floor(rotateRightEye(1,1) + 90 - xmin)
+    height = 420;
     
 end
