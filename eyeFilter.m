@@ -10,7 +10,6 @@ function [eyePair] = eyeFilter(img)
     m = theMouth.Centroid(1, :);
 
     n = size(possibleEyes.Centroid, 1);
-    n
     
     eyePair = zeros(2, 2);
 
