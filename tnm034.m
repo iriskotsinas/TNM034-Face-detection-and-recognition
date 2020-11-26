@@ -20,12 +20,19 @@ function id = tnm034(im)
         img = faceMask(img);
         
         eyePair = eyeFilter(img);
+        
+        [image, xmin, ymin, width, height] = faceAlignment(org, eyePair(1, :), eyePair(2, :));
+        
+        img = imcrop(image, [xmin, ymin, width, height]);
+        
+        
 
-        eyePair
+        %eyePair
 
         subplot(4, 4, i);
-        imshow(org);
-        hold on;
-        plot(eyePair(:, 1), eyePair(:, 2), 'r*');
+        imshow(img);
+        %imshow(org);
+        %hold on;
+        %plot(eyePair(:, 1), eyePair(:, 2), 'r*');
     end
-end       
+end
