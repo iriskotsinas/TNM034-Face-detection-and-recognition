@@ -9,6 +9,9 @@ function id = tnm034(im)
     figure(1);
     clf
     
+    meanFace = zeros(301*282, 1);
+    faces = zeros(301*282, 16);
+    
     for i=1:1:16
         if i <= 9
             org = im2double(imread(sprintf('images/DB1/db1_0%d.jpg', i)));
@@ -30,9 +33,31 @@ function id = tnm034(im)
         %eyePair
 
         subplot(4, 4, i);
+        %imshow(img);
+        
+        img = rgb2gray(img);
+        vec = reshape(img, [], 1);
+        
+        faces(:, i) = vec;
+        size(vec)
+        
         imshow(img);
+        
+        meanFace = meanFace + vec;
+        
         %imshow(org);
         %hold on;
         %plot(eyePair(:, 1), eyePair(:, 2), 'r*');
     end
+    
+    meanFace = meanFace .* (1/16);
+    
+%     figure(2);
+%     meanFace = reshape(meanFace, [301, 282]);
+%     imshow(meanFace);
+   
+       test = eigenface(meanFace, faces);
+
+    
+    
 end
