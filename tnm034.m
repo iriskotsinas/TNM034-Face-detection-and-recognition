@@ -5,58 +5,78 @@
 % i.e. ‘1’, ‘2’,...,‘16’ for the persons belonging to ‘db1’ 
 % and ‘0’ for all other faces.
 function id = tnm034(im)
+    %meanFace = getMeanFace(); 
+    %getEigenfaces(meanFace);
+    
+    org = im2double(imread('images/DB1/db1_01.jpg'));
+    
+    img = detection(org);
+    img = rgb2gray(img);
     
     figure(1);
-    clf
+    imshow(img);
     
-    meanFace = zeros(301*282, 1);
-    faces = zeros(301*282, 16);
+    load('eigenfaces.mat');
+    load('meanface.mat');
     
-    for i=1:1:16
-        if i <= 9
-            org = im2double(imread(sprintf('images/DB1/db1_0%d.jpg', i)));
-        else
-            org = im2double(imread(sprintf('images/DB1/db1_%d.jpg', i))); 
-        end
+    img = reshape(img, [], 1);
+    
+    phi = img - meanface;
+    
+    
+    
+    w = phi' * A;
+    w = normr(w);
+    w
+    
+    
+    
+%     W = zeros(1, 16);
+%     for k = 1:1:16
+%         W(1,i) = eigenfaces * phi;
+%     end
 
-        img = whiteWorldCorrection(org);
-        img = faceMask(img);
-        
-        eyePair = eyeFilter(img);
-        
-        [image, xmin, ymin, width, height] = faceAlignment(org, eyePair(1, :), eyePair(2, :));
-        
-        img = imcrop(image, [xmin, ymin, width, height]);
-        
-        
 
-        %eyePair
-
-        subplot(4, 4, i);
-        %imshow(img);
-        
-        img = rgb2gray(img);
-        vec = reshape(img, [], 1);
-        
-        faces(:, i) = vec;
-        size(vec)
-        
-        imshow(img);
-        
-        meanFace = meanFace + vec;
-        
-        %imshow(org);
-        %hold on;
-        %plot(eyePair(:, 1), eyePair(:, 2), 'r*');
-    end
-    
-    meanFace = meanFace .* (1/16);
-    
+%     figure(1);
+%     clf
+%     
+%     meanFace = zeros(301*282, 1);
+%     faces = zeros(301*282, 16);
+%     
+%     for i=1:1:16
+%         if i <= 9
+%             org = im2double(imread(sprintf('images/DB1/db1_0%d.jpg', i)));
+%         else
+%             org = im2double(imread(sprintf('images/DB1/db1_%d.jpg', i))); 
+%         end
+%         
+%         img = detection(org);
+%         img = rgb2gray(img);
+%         
+%         subplot(4, 4, i);
+%         imshow(img);
+%         
+%         
+%         vec = reshape(img, [], 1);
+%         
+%         faces(:, i) = vec;
+%         
+% 
+%         
+%         meanFace = meanFace + vec;
+%         
+%         %imshow(org);
+%         %hold on;
+%         %plot(eyePair(:, 1), eyePair(:, 2), 'r*');
+%     end
+%     
+%     meanFace = meanFace .* (1/16);
+%     
 %     figure(2);
 %     meanFace = reshape(meanFace, [301, 282]);
 %     imshow(meanFace);
-   
-       test = eigenface(meanFace, faces);
+%    
+%        test = eigenface(meanFace, faces);
 
     
     
