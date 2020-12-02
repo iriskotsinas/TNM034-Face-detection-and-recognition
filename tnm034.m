@@ -5,29 +5,41 @@
 % i.e. ‘1’, ‘2’,...,‘16’ for the persons belonging to ‘db1’ 
 % and ‘0’ for all other faces.
 function id = tnm034(im)
-    %meanFace = getMeanFace(); 
-    %getEigenfaces(meanFace);
+    meanFace = getMeanFace(); 
+    [u, w] = getEigenfaces(meanFace);
     
     org = im2double(imread('images/DB1/db1_01.jpg'));
     
     img = detection(org);
     img = rgb2gray(img);
     
-    figure(1);
-    imshow(img);
+    test = reshape(img, [], 1);
+    test = test - meanFace;
+
     
-    load('eigenfaces.mat');
-    load('meanface.mat');
+    ww = u' * test;
+
+    [val, idx] = min(sum(sqrt((ww-w).^2),1));
+    idx
+    %[V,index] = min(sum(sqrt((ww-w).^2)));
+    %index
+
     
-    img = reshape(img, [], 1);
-    
-    phi = img - meanface;
-    
-    
-    
-    w = phi' * A;
-    w = normr(w);
-    w
+%     figure(1);
+%     imshow(img);
+%     
+%     load('eigenfaces.mat');
+%     load('meanface.mat');
+%     
+%     img = reshape(img, [], 1);
+%     
+%     phi = img - meanface;
+%     
+%     
+%     
+%     w = phi' * A;
+%     w = normr(w);
+%     w
     
     
     

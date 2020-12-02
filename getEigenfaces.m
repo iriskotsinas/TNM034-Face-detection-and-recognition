@@ -1,4 +1,4 @@
-function faces = getEigenfaces(meanFace)
+function [u, w] = getEigenfaces(meanFace)
     HEIGHT = 301;
     WIDTH = 282;
     
@@ -26,32 +26,39 @@ function faces = getEigenfaces(meanFace)
     
     % A = n x M (M = 16)
     % calculate 16 eigenvectors (A^T*A)
-    v = A' * A;
-    [v, ~] = eig(v);
-    size(v)
+    C = A' * A;
+    [V, ~] = eig(C);
     
-    W = zeros(16, 16);
-    
-    for i = 1:1:16
-        u = A * v(:,i);
-        w = u' * A;
-        size(w)
-        W(:,i) = w(1, :)';
-        
-        uImg = reshape(u, HEIGHT, WIDTH);
-        temp = uImg - min(uImg(:));
-        temp = temp / max(temp(:));
-        subplot(4, 4, i);
-        imshow(temp);
+    u = zeros(size(A));
+    for k=1:1:16
+        u(:,1) = A*V(:,i);
     end
     
-    faces = A;
+    w = u' * A;
     
-    W = normc(W);
     
-    weights = W;
-    
-    save('eigenfaces.mat', 'weights', 'A');
+%     W = zeros(16, 16);
+%     
+%     for i = 1:1:16
+%         u = A * v(:,i);
+%         w = u' * A;
+%         size(w)
+%         W(:,i) = w(1, :)';
+%         
+%         uImg = reshape(u, HEIGHT, WIDTH);
+%         temp = uImg - min(uImg(:));
+%         temp = temp / max(temp(:));
+%         subplot(4, 4, i);
+%         imshow(temp);
+%     end
+%     
+%     faces = A;
+%     
+%     W = normc(W);
+%     
+%     weights = W;
+%     
+%     save('eigenfaces.mat', 'weights', 'A');
     
     
 end
