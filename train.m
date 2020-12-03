@@ -10,6 +10,11 @@ function [weights, eigenFaces, meanFace] = train()
     
     
     for k = 1:1:n
+%         if k <= 9
+%             img = im2double(imread(sprintf('images/train/image_000%d.jpg', k)));
+%         else
+%             img = im2double(imread(sprintf('images/train/image_00%d.jpg', k)));
+%         end
         if k <= 9
             img = im2double(imread(sprintf('images/DB1/db1_0%d.jpg', k)));
         else
@@ -24,7 +29,7 @@ function [weights, eigenFaces, meanFace] = train()
         
         % reshape to column vector
         img = reshape(img, [], 1);
-        
+
         % append to meanface
         meanFace = meanFace + img;
         

@@ -5,8 +5,8 @@
 % i.e. ‘1’, ‘2’,...,‘16’ for the persons belonging to ‘db1’ 
 % and ‘0’ for all other faces.
 function id = tnm034(im)    
-    %[weights, eigenFaces, meanFace] = train();
-    %save('data.mat', 'weights', 'eigenFaces', 'meanFace');
+    [weights, eigenFaces, meanFace] = train();
+    save('data.mat', 'weights', 'eigenFaces', 'meanFace');
     
     load('data.mat', 'weights', 'eigenFaces', 'meanFace');
     
