@@ -13,13 +13,28 @@ cr = a(:,:,3);
 %Allocate memory for the segment mask
 segment = zeros(w,h);
 
+crx = imgaussfilt(cr, 90);
 
-%  ll= impixel(hue);
-%  ll
-%Create the mask by using threshold values from the input image.
+for i=1:w
+    for j=1:h  
+       if (0.50 < crx(i,j) && 0.7 > crx(i,j))
+           segment(i,j) = 1;
+       else
+           segment(i,j) = 0;
+       end
+    end
+end
+
+% keep biggest area in image
+segment = medfilt2(bwareafilt(imbinarize(segment), 1));
+
+cb = cb .* segment;
+cr = cr .* segment;
+
 for i=1:w
     for j=1:h            
-        if  (0.48<=cr(i,j) && cr(i,j)<=0.67 && 0.4<=cb(i,j) && cb(i,j)<=0.52 &&  hue(i,j)>=0 && hue(i,j)<=0.08) || hue(i,j)>= 0.8    
+        if  (0.52<=cr(i,j) && cr(i,j)<=0.6 && hue(i,j) > 0.02)
+        %if  (0.52<=cr(i,j) && cr(i,j)<=0.6 && 0.4 < cb(i,j) && cb(i,j) < 0.6 && hue(i,j) > 0.01)
             segment(i,j)=1;            
         else       
             segment(i,j)=0;    
@@ -27,31 +42,15 @@ for i=1:w
     end
 end
 
-%imshow(segment)
-%figure;
-%Open the image
+segment = imfill(segment, 'holes');
+%segment = imclose(segment, strel('disk', 14, 4));
+%segment = imopen(segment, strel('disk', 14, 4));
+segment = imclose(segment, strel('disk', 20, 4));
+segment = imopen(segment, strel('disk', 20, 4));
+segment = imopen(segment, strel('rectangle', [120, 1]));
+segment = medfilt2(bwareafilt(segment, 1));
 
-segment = imfill(segment,'holes');
-
-se = strel('disk',10,8);
-
-segment = imopen(segment,se);
-
-% se = strel('disk',10,4);
-% segment = imclose(segment,se);
-
-%Close the image
-
-
-%imshow(segment);
-%figure;
-%Add the different color channels multiplied by the segment mask.
 im(:,:,1)=I(:,:,1).*segment;   
 im(:,:,2)=I(:,:,2).*segment; 
 im(:,:,3)=I(:,:,3).*segment; 
-
-
-%returnimage = Segmentation(im);
-
-
 end

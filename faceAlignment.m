@@ -51,10 +51,11 @@ function [image, xmin, ymin, width, height] = faceAlignment(origimg, lefteye, ri
     %Scale coordinates
     rotateLeftEye = rotateLeftEye.*(111/length_x); 
     rotateRightEye = rotateRightEye.*(111/length_x);
-           
-    xmin = floor(rotateLeftEye(1,1) - 80);
+
+    xmin = floor(rotateLeftEye(1,1) - 50);
     ymin = floor(rotateLeftEye(1,2) - 100);
-    width = floor(rotateRightEye(1,1) + 90 - xmin);
-    height = 300;
+    %width = floor(rotateRightEye(1,1) + 60 - xmin);
+    width = 211;
+    height = 280;
     
 end

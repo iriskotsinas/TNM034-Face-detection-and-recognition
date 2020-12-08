@@ -1,7 +1,9 @@
 function [weights, eigenFaces, meanFace] = train()
     % cropped image dimensions
-    w = 282;    
-    h = 301;
+%     w = 282;    
+%     h = 301;
+    w = 212;
+    h = 281;
     
     n = 16;
     
