@@ -1,4 +1,4 @@
-function test3(uri)
+function x = test(uri, alpha)
     %uri = 'images/DB1/db1_01.jpg';
     
     clf;
@@ -6,6 +6,17 @@ function test3(uri)
     
     % original image
     orgImg = im2double(imread(uri));
+%     
+    s = size(orgImg);
+    diffw = 0.05 * s(1);
+    diffh = 0.05 * s(2);
+    orgImg = imcrop(orgImg, [diffw, diffh, s(2) - 2*diffw, s(1) - 2*diffh]);
+    
+    orgImg = imrotate(orgImg, alpha);
+    orgImg = orgImg .* (1.3 - rand() * 0.6);
+    
+    
+
     subplot(3, 3, 1);
     imshow(orgImg);
     
@@ -39,6 +50,7 @@ function test3(uri)
     if eyePair == zeros(2,2)
         "no eyes found"
         uri
+        x = -1
         return
     else
         hold on;
@@ -60,8 +72,10 @@ function test3(uri)
     if (dim(1) == h && dim(2) == w)
         subplot(3, 3, 8);
         imshow(out);
+        x = 1
     else
         "rotation failed"
         uri
+        x = -1
     end
 end

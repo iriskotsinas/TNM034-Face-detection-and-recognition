@@ -30,4 +30,8 @@ new_im = cat(3, out_R,out_G,out_B);
 %imshow(new_im);
 
 out_im = im2double(new_im);
+
+out_im(:, :, 1)  = imadjust(out_im(:, :, 1), [0.05, 0.95]);
+out_im(:, :, 2)  = imadjust(out_im(:, :, 2),[0.05, 0.95]); 
+out_im(:, :, 3) = imadjust(out_im(:, :, 3), [0.05, 0.95]);
 end

@@ -13,7 +13,9 @@ function id = tnm034(im)
     % TODO: im ska avändas här egentligen...!
     %uri = 'images/DB1/db1_02.jpg';
     %testImg = detection(im2double(imread(uri)));
-    testImg = detection(im2double(im));
+    wtf = im2double(im);
+    testImg = imrotate(wtf, rand() * 10 - 20);
+    testImg = detection(testImg);
     
     if (testImg == -1)
         id = 0;
@@ -29,11 +31,12 @@ function id = tnm034(im)
     [magnitude, index] = min(sum((testWeights - weights).^2, 1));
     magnitude
     % TODO: undersök vilket värde på felet
-    if magnitude > 50
+    if magnitude > 6000000000
         id = 0;
     else
         id = index;
     end
+    
     
     clear weights eigenFaces meanFace;
 end
