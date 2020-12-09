@@ -1,14 +1,80 @@
 function [eyePair] = eyeFilter(img)
-
-    eye = eyeMap(img) > 0.8;
-    mouth = mouthMap(img) > 0.9;
+    mouth = mouthMap(img);
+    mouth=(mouth-min(mouth(:)))/(max(mouth(:))-min(mouth(:)));
+    mouth = mouth >= 1;
     
-    possibleEyes = regionprops('table', eye, 'Centroid', 'MajorAxisLength', 'MinorAxisLength');
+%     quantile((max(mouthMap(img))), 0.9);
+%     if(quantile((max(mouthMap(img))), 0.9) < 0.1)
+%         mouth = mouthMap(img) > 0.8;
+%     else
+%          mouth = mouthMap(img) > 0.8;
+%     end
+%     
+    
+    
     
     % TODO: check this plz!
     theMouth = regionprops('table', mouth, 'Centroid', 'MajorAxisLength', 'MinorAxisLength');
     m = theMouth.Centroid(1, :);
+    m
+    
 
+    
+    
+    o = zeros(size(img));
+    boxSizedown = 150;
+    boxSizeUpper = 200;
+    %%@@TODO: Make sure to check different mouth candidates, right now we
+    %%assume that we have chosen the correct point right away!
+    %img(upleft, RIGHT) ish
+     hold on;
+    plot(m(1),m(2),'g*');
+    hold off;
+    try
+        o(floor(m(1,1)-boxSizedown-150):floor(m(1,1)), floor(m(1,2)-boxSizeUpper-50):floor(m(1,2)+boxSizeUpper+50)) =  img(floor(m(1,1)-boxSizedown-150):floor(m(1,1)), (floor(m(1,2)-boxSizeUpper-50):floor(m(1,2)+boxSizeUpper+50)));
+        %Debug code to validate mouth candidate.
+%         subplot(1,2,1);
+%         imshow(img);
+%         hold on;
+%         plot(m(1),m(2),'g*');
+%         hold off;
+% 
+%         subplot(1,2,2);
+%         imshow(o)
+%         hold on;
+%         plot(m(1),m(2),'g*');
+%         figure(2);
+
+        eye = eyeMap(o);
+    catch
+        try
+            %Try smaller box
+            o(floor(m(1,1)-boxSizedown):floor(m(1,1)), floor(m(1,2)-boxSizeUpper):floor(m(1,2)+boxSizeUpper+50)) =  img(floor(m(1,1)-boxSizedown):floor(m(1,1)), (floor(m(1,2)-boxSizeUpper-50):floor(m(1,2)+boxSizeUpper)));
+%             subplot(1,2,1);
+%         imshow(img);
+%         hold on;
+%         plot(m(1),m(2),'g*');
+%         hold off;
+% 
+%         subplot(1,2,2);
+%         imshow(o)
+%         hold on;
+%         plot(m(1),m(2),'g*');
+%         figure(2);
+            eye = eyeMap(img);
+        catch
+            eye = eyeMap(img);
+        end
+        
+    end
+    
+   
+
+%     eye = eyeMap(o);
+    eye=(eye-min(eye(:)))/(max(eye(:))-min(eye(:))) > 0.8;
+    
+    possibleEyes = regionprops('table', eye, 'Centroid', 'MajorAxisLength', 'MinorAxisLength');
+    
     n = size(possibleEyes.Centroid, 1);
     
     eyePair = zeros(2, 2);

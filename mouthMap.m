@@ -14,7 +14,7 @@ n_cr = size(cr,1)*size(cr,2);
 %Fr�ga om 1/n ska va med eller kan det tas bort?
 %Fr�ga om normalizering?
 %Fr�ga om dilate + masking i slutet
-eta = 0.95*( ((1/n_cb)*sum(cr(:).^2)) / ((1/n_cr)*sum(cr(:)./cb(:))) );
+eta = 0.85*( ((1/n_cb)*sum(cr(:).^2)) / ((1/n_cr)*sum(cr(:)./cb(:))) );
 
 mouthMapImage = cr.^2 .* (cr.^2 - (eta* (( cr./cb )))).^2;
 

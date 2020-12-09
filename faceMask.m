@@ -31,9 +31,25 @@ segment = medfilt2(bwareafilt(imbinarize(segment), 1));
 cb = cb .* segment;
 cr = cr .* segment;
 
+
+
+if(sum(max(quantile(cr,.5))) <= 0.58)
+    lowCr = sum(max(quantile(cr,.5)))
+else
+    lowCr = sum(max(quantile(cr,.2)))
+end
+
+lowCb = sum(max(quantile(cb,.05)))
+
+
+if(sum(max(quantile(cr,.2))> 0.5))
+   lowCr = 0.52;
+end
+
+
 for i=1:w
     for j=1:h            
-        if  (0.52<=cr(i,j) && cr(i,j)<=0.6 && hue(i,j) > 0.02)
+        if  (lowCr<=cr(i,j) && cr(i,j)<=0.6 && lowCb<=cb(i,j) && hue(i,j) > 0.02)
         %if  (0.52<=cr(i,j) && cr(i,j)<=0.6 && 0.4 < cb(i,j) && cb(i,j) < 0.6 && hue(i,j) > 0.01)
             segment(i,j)=1;            
         else       
@@ -52,5 +68,16 @@ segment = medfilt2(bwareafilt(segment, 1));
 
 im(:,:,1)=I(:,:,1).*segment;   
 im(:,:,2)=I(:,:,2).*segment; 
-im(:,:,3)=I(:,:,3).*segment; 
+im(:,:,3)=I(:,:,3).*segment;
+
+
+% meanie = mean(im(:))
+% sum(mean(im(:)))
+% if(meanie < 0.12)
+%     disp('a');
+%     im(:,:,1) = imadjust(im(:,:,1));
+%     im(:,:,2) = imadjust(im(:,:,2));
+%     im(:,:,3) = imadjust(im(:,:,3));
+% end
+
 end

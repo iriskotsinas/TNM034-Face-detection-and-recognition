@@ -10,9 +10,9 @@ R_sorted = sort(im_R(:),'descend');    % Sort Descending
 G_sorted = sort(im_G(:),'descend');    % Sort Descending
 B_sorted = sort(im_B(:),'descend');    % Sort Descending
 
-max_R = mean(R_sorted(1:ceil(length(R_sorted)*0.05)));   % Desired Output
-max_G = mean(G_sorted(1:ceil(length(G_sorted)*0.05)));   % Desired Output
-max_B = mean(B_sorted(1:ceil(length(B_sorted)*0.05)));   % Desired Output
+max_R = mean(R_sorted(1:ceil(length(R_sorted)*0.1)));   % Desired Output
+max_G = mean(G_sorted(1:ceil(length(G_sorted)*0.1)));   % Desired Output
+max_B = mean(B_sorted(1:ceil(length(B_sorted)*0.1)));   % Desired Output
 
 alpha = max_G/max_R;
 beta = max_G/max_B;
