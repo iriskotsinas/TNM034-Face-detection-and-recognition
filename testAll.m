@@ -1,14 +1,30 @@
 function testAll()
-    for k = 1:1:3
-        if (k < 10)
-            uri = sprintf('images/DB1/db1_0%d.jpg', k); 
-        else
-            uri = sprintf('images/DB1/db1_%d.jpg', k);
-        end
-        
-        im = imread(uri);
-        tnm034(im)
-    end
+
+tnm034(imread("images/test/db1_02.jpg"))
+pause(1);
+tnm034(imread("images/DB1/db1_02.jpg"));
+
+
+% % TEST DB1
+% for k = 1:1:16
+%     if (k < 10)
+%         uri = sprintf('images/DB1/db1_0%d.jpg', k); 
+%     else
+%         uri = sprintf('images/DB1/db1_%d.jpg', k);
+%     end
+% 
+%     im = imread(uri);
+%     fel = 0;
+%     if (tnm034(im) ~= k)
+%         fel = fel + 1;
+%     end
+% end
+% fel
+ 
+
+
+
+
 % 
 %     for k = 1:1:16
 %         if (k < 10)

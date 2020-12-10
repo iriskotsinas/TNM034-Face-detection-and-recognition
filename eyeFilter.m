@@ -1,11 +1,9 @@
-function [eyePair] = eyeFilter(img)
-
-    eye = eyeMap(img) > 0.8;
-    mouth = mouthMap(img) > 0.9;
+function [eyePair] = eyeFilter(img, mouth, eye)
+    %eye = eyeMap(img) > 0.8;
+    %mouth = mouthMap(img) > 0.9;
     
     possibleEyes = regionprops('table', eye, 'Centroid', 'MajorAxisLength', 'MinorAxisLength');
     
-    % TODO: check this plz!
     theMouth = regionprops('table', mouth, 'Centroid', 'MajorAxisLength', 'MinorAxisLength');
     m = theMouth.Centroid(1, :);
 

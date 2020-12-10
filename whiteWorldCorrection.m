@@ -22,16 +22,5 @@ out_G = uint8(im_G*255);
 out_B = uint8(beta*im_B*255);
 
 new_im = cat(3, out_R,out_G,out_B);
-%figure;
-%subplot(1,2,1);
-%imshow(im);
-
-%subplot(1,2,2);
-%imshow(new_im);
-
 out_im = im2double(new_im);
-
-out_im(:, :, 1)  = imadjust(out_im(:, :, 1), [0.05, 0.95]);
-out_im(:, :, 2)  = imadjust(out_im(:, :, 2),[0.05, 0.95]); 
-out_im(:, :, 3) = imadjust(out_im(:, :, 3), [0.05, 0.95]);
 end

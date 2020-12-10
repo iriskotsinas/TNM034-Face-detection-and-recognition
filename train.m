@@ -1,8 +1,8 @@
-function [weights, eigenFaces, meanFace] = train()
+function train()
     % cropped image dimensions
 %     w = 282;    
 %     h = 301;
-    w = 212;
+    w = 222;
     h = 281;
     
     n = 16;
@@ -12,11 +12,6 @@ function [weights, eigenFaces, meanFace] = train()
     
     
     for k = 1:1:n
-%         if k <= 9
-%             img = im2double(imread(sprintf('images/train/image_000%d.jpg', k)));
-%         else
-%             img = im2double(imread(sprintf('images/train/image_00%d.jpg', k)));
-%         end
         if k <= 9
             img = im2double(imread(sprintf('images/DB1/db1_0%d.jpg', k)));
         else
@@ -24,7 +19,8 @@ function [weights, eigenFaces, meanFace] = train()
         end
         
         % crop image to face
-        img = detection(img);
+        img = detection(img, true);
+        size(img)
         
         % color => black/white
         img = rgb2gray(img);  
@@ -57,7 +53,7 @@ function [weights, eigenFaces, meanFace] = train()
         eigenFaces(:, k) = phi * eigenVectors(:, k);
     end
     
-    % TODO: här borde vi bara ta de bästa egenvektorerna, om vi har flera
-    % bilder på samma person
     weights = eigenFaces' * phi;
+    
+    save('data.mat', 'weights', 'eigenFaces', 'meanFace');
 end

@@ -1,4 +1,4 @@
-function [ output ] = colorCorrectionGrayWorld(input)
+function output = colorCorrectionGrayWorld(input)
     %Scale each of the R, G and B-channels using 3 global adjustment
     %factors, to achieve equal mean values
     
