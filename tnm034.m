@@ -24,11 +24,17 @@ testImg = testImg - meanFace;
 
 testWeights = eigenFaces' * testImg;
 
-[magnitude, index] = min(sum((testWeights - weights).^2, 1));
+
+feel = sqrt(sum((testWeights - weights).^2, 1));
+
+%figure(1);
+%plot(1:1:16, feel);
+
+[magnitude, index] = min(feel);
 
 magnitude
 
-if magnitude > 50
+if magnitude > 400
     id = 0;
 else
     id = index;

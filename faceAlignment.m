@@ -12,14 +12,16 @@ function [image, xmin, ymin, width, height] = faceAlignment(origimg, lefteye, ri
     
     %Check which way to rotate
     if(c(1,2) < c(2,2))
-        angle = -acosd(xlength / hypo);
+        angle = atand(ylength / xlength);
+        %angle = -acosd(xlength / hypo);
     elseif(c(1,2) == c(2,2))
         angle = 0;
     else
-        angle = acosd(xlength / hypo);
+        %angle = acosd(xlength / hypo);
+        angle = -atand(ylength / xlength);
     end
     
-    rotImage = imrotate(origimg, -angle); % <--- RETURN VALUE
+    rotImage = imrotate(origimg, angle, 'bilinear', 'crop'); % <--- RETURN VALUE
     
     %Get new position of eye
     
@@ -27,8 +29,8 @@ function [image, xmin, ymin, width, height] = faceAlignment(origimg, lefteye, ri
     rightEyeP = c(2,:)';   % coordinates of right eye point
     
     alpha = angle;   % angle for rotation ---- VARF�R FUNKAR DETTA?? DET SKA V�L VA -angle??
-    RotatedIm = imrotate(origimg,alpha);   % rotation of the main image (im)
-    RotMatrix = [cosd(alpha) -sind(alpha); sind(alpha) cosd(alpha)]; 
+    RotatedIm = rotImage;   % rotation of the main image (im)
+    RotMatrix = [cosd(alpha) sind(alpha); -sind(alpha) cosd(alpha)]; 
     ImCenterA = (size(origimg(:,:,1))/2)';         % Center of the main image
     ImCenterB = (size(RotatedIm(:,:,1))/2)';  % Center of the transformed image
     
@@ -54,7 +56,8 @@ function [image, xmin, ymin, width, height] = faceAlignment(origimg, lefteye, ri
 
     xmin = floor(rotateLeftEye(1,1) - 50);
     ymin = floor(rotateLeftEye(1,2) - 100);
-    width = floor(rotateRightEye(1,1) + 60 - xmin); % 221
+    width = 211;
+    %width = floor(rotateRightEye(1,1) + 60 - xmin); % 221
     height = 280;
     
 end

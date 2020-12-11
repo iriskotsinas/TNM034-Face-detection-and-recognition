@@ -60,6 +60,7 @@ function out = detection(img, debug)
 % REMOVE
 orgImg = img;
 img = colorCorrectionGrayWorld(img);
+colorCorreted = img;
     
 if (debug)
     clf;
@@ -114,7 +115,7 @@ eyePair = eyeFilter(orgImg, mouth, eye);
 if (eyePair == zeros(2,2))
     if (debug)
         "no eyes found"
-        uri
+        
     end
     out = -1;
     return
@@ -138,14 +139,15 @@ if (debug)
 end
 
 % rotate + crop image
-h = 280;
-w = 221;
-[image, xmin, ymin, width, height] = faceAlignment(orgImg, eyePair(1, :), eyePair(2, :));
+h = 281;
+w = 212;
+[image, xmin, ymin, width, height] = faceAlignment(im2double(colorCorreted), eyePair(1, :), eyePair(2, :));
 out = imcrop(image, [xmin, ymin, width, height]);
-% if (width ~= w || height ~= h)
-%     out = -1;
-%     return;
-% end
+ss = size(out)
+if (ss(1) ~= h || ss(2) ~= w)
+    out = -1;
+    return;
+end
 
 if (debug)
     subplot(4, 3, 10);
