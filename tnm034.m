@@ -5,14 +5,10 @@
 % i.e. ‘1’, ‘2’,...,‘16’ for the persons belonging to ‘db1’ 
 % and ‘0’ for all other faces.
 function id = tnm034(im)    
-% % TEST
-% im = imread("images/DB1/db1_01.jpg");
-% % TEST
-
 load('data.mat', 'weights', 'eigenFaces', 'meanFace');
 
 img = im2double(im);
-testImg = detection(img, true);
+testImg = detection(img, false);
 if (testImg == -1)
     id = 0;
     return;
@@ -24,17 +20,10 @@ testImg = testImg - meanFace;
 
 testWeights = eigenFaces' * testImg;
 
+error = sqrt(sum((testWeights - weights).^2, 1));
+[magnitude, index] = min(error);
 
-feel = sqrt(sum((testWeights - weights).^2, 1));
-
-%figure(1);
-%plot(1:1:16, feel);
-
-[magnitude, index] = min(feel);
-
-magnitude
-
-if magnitude > 400
+if magnitude > 450
     id = 0;
 else
     id = index;

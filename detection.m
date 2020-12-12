@@ -1,63 +1,4 @@
-% function swag()
-%     clf;
-%       db2 = [
-%         "bl_01.jpg"
-%         "bl_02.jpg"
-%         "bl_04.jpg"
-%         "bl_05.jpg"
-%         "bl_06.jpg"
-%         "bl_07.jpg"
-%         "bl_10.jpg"
-%         "bl_13.jpg"
-%         "bl_14.jpg"
-%         "cl_01.jpg"
-%         "cl_02.jpg"
-%         "cl_03.jpg"
-%         "cl_04.jpg"
-%         "cl_05.jpg"
-%         "cl_06.jpg"
-%         "cl_07.jpg"
-%         "cl_08.jpg"
-%         "cl_09.jpg"
-%         "cl_10.jpg"
-%         "cl_11.jpg"
-%         "cl_12.jpg"
-%         "cl_13.jpg"
-%         "cl_14.jpg"
-%         "cl_15.jpg"
-%         "cl_16.jpg"
-%         "ex_01.jpg"
-%         "ex_03.jpg"
-%         "ex_04.jpg"
-%         "ex_07.jpg"
-%         "ex_09.jpg"
-%         "ex_11.jpg"
-%         "ex_12.jpg"
-%         "il_01.jpg"
-%         "il_07.jpg"
-%         "il_08.jpg"
-%         "il_09.jpg"
-%         "il_12.jpg"
-%         "il_16.jpg"
-%     ];
-%     s = size(db2);
-% %     for k = 1:1:s(1)
-% %         uri = "images/DB2/" + db2(k);
-% %     for k = 1:1:4
-% %         uri = sprintf('images/DB0/db0_%d.jpg', k);
-    
 function out = detection(img, debug)
-%     for k = 1:1:16
-%         if (k < 10)
-%             uri = sprintf('images/DB1/db1_0%d.jpg', k); 
-%         else
-%             uri = sprintf('images/DB1/db1_%d.jpg', k);
-%         end
-%         img = im2double(imread(uri));
-% 
-% debug = true;
-
-% REMOVE
 orgImg = img;
 img = colorCorrectionGrayWorld(img);
 colorCorreted = img;
@@ -143,7 +84,7 @@ h = 281;
 w = 212;
 [image, xmin, ymin, width, height] = faceAlignment(im2double(colorCorreted), eyePair(1, :), eyePair(2, :));
 out = imcrop(image, [xmin, ymin, width, height]);
-ss = size(out)
+ss = size(out);
 if (ss(1) ~= h || ss(2) ~= w)
     out = -1;
     return;
